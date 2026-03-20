@@ -78,6 +78,22 @@ export function LocationInput({
   // Add debounce timer ref
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Track whether the user is actively typing in the popover input.
+  // When true, we skip imperative value sync so typing isn't clobbered.
+  const isTypingRef = useRef(false);
+  const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // Imperatively sync the popover input value when navigating suggestions.
+  // The popover input uses defaultValue (uncontrolled) to avoid clobbering
+  // character-by-character keyboard typing. This effect handles the cases
+  // where we need to programmatically set the display value.
+  useEffect(() => {
+    const el = popoverInputRef.current;
+    if (!el || isTypingRef.current) return;
+    if (hasNavigatedToSuggestion && highlightedDisplayText) {
+      el.value = highlightedDisplayText;
+    }
+  }, [hasNavigatedToSuggestion, highlightedDisplayText]);
+
   // Track value at time of opening to allow reverting uncommitted edits on close
   const valueOnOpenRef = useRef<string>("");
   const wasCommittedRef = useRef<boolean>(false);
@@ -442,7 +458,10 @@ export function LocationInput({
     }
   }, [isPopoverOpen, handleClosePopover]);
 
-  // Ensure popover input focuses and selects text right after opening
+  // Ensure popover input focuses and selects text right after opening.
+  // IMPORTANT: only depend on isPopoverOpen — not searchQuery/value.
+  // Including searchQuery re-runs this effect on every keystroke, which
+  // calls input.select() and clobbers character-by-character typing.
   useEffect(() => {
     if (!isPopoverOpen) return;
     const text = isMultiSelect ? searchQuery : value;
@@ -456,7 +475,8 @@ export function LocationInput({
         setTimeout(() => input.select(), 0);
       }
     });
-  }, [isPopoverOpen, isMultiSelect, searchQuery, value]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPopoverOpen]);
 
   const normalInputRef = useRef<HTMLInputElement>(null);
   const popoverInputRef = useRef<HTMLInputElement>(null);
@@ -486,6 +506,11 @@ export function LocationInput({
   ) => {
     const input = inputRef.current;
     if (!input || !textToSelect) return;
+    // Only select all on initial focus, not during active typing.
+    // Without this guard, React re-renders re-trigger onFocus which calls
+    // input.select(), selecting all text between keystrokes and causing
+    // each new character to replace the previous one.
+    if (isTypingRef.current) return;
     // Defer to ensure DOM focus state is settled
     setTimeout(() => input.select(), 0);
   };
@@ -789,6 +814,10 @@ export function LocationInput({
   // Modify handlePopoverInputChange to remove direct searchAirports call
   const handlePopoverInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+    // Mark as actively typing so imperative value sync is suspended.
+    isTypingRef.current = true;
+    if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+    typingTimerRef.current = setTimeout(() => { isTypingRef.current = false; }, 300);
     setSearchQuery(newValue);
     if (!isMultiSelect) {
       onChange(newValue);
@@ -1199,12 +1228,8 @@ export function LocationInput({
                 {/* Search input */}
                 <Input
                   ref={popoverInputRef}
-                  value={
-                    hasNavigatedToSuggestion && highlightedDisplayText
-                      ? highlightedDisplayText
-                      : isMultiSelect
-                        ? searchQuery
-                        : value
+                  defaultValue={
+                    isMultiSelect ? searchQuery : value
                   }
                   onChange={handlePopoverInputChange}
                   onFocus={() =>
