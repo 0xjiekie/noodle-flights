@@ -516,8 +516,10 @@ export function LocationInput({
   };
 
   const handleNormalInputClick = () => {
-    // Add 200ms delay before opening popover
-    setTimeout(() => {
+    // Open popover immediately — no delay. A delay causes race conditions
+    // when the agent types quickly after clicking: keystrokes land in the
+    // normal input (controlled, value={}) instead of the popover input.
+    {
       // Capture current value for potential revert if user doesn't commit
       valueOnOpenRef.current = value;
       wasCommittedRef.current = false;
@@ -537,7 +539,7 @@ export function LocationInput({
         setSearchQuery("");
       }
       // Focus/selection handled in isPopoverOpen effect
-    }, 35);
+    }
   };
 
   // Prevent normal input from receiving focus; open popover instead
@@ -563,20 +565,17 @@ export function LocationInput({
     if (newValue === "") {
       handleClosePopover();
     } else if (!isPopoverOpen) {
-      // Add 200ms delay before opening popover
+      // Open popover immediately — no delay. Delays cause keystrokes to land
+      // in the normal input instead of the popover input.
+      valueOnOpenRef.current = value;
+      wasCommittedRef.current = false;
+      setIsPopoverOpen(true);
+      if (selectedLocations.length <= 1 && selectedCities.length === 0) {
+        setSearchQuery(newValue);
+      }
       setTimeout(() => {
-        // Capture current value for potential revert if user doesn't commit
-        valueOnOpenRef.current = value;
-        wasCommittedRef.current = false;
-        setIsPopoverOpen(true);
-        // Only set search query if not in multiselect mode
-        if (selectedLocations.length <= 1 && selectedCities.length === 0) {
-          setSearchQuery(newValue);
-        }
-        setTimeout(() => {
-          popoverInputRef.current?.focus();
-        }, 0);
-      }, 100);
+        popoverInputRef.current?.focus();
+      }, 0);
     }
   };
 
@@ -1027,6 +1026,7 @@ export function LocationInput({
         <Input
           ref={normalInputRef}
           value={value}
+          readOnly
           onChange={handleNormalInputChange}
           onClick={undefined}
           onPointerDown={handleNormalInputPointerDown}
