@@ -587,17 +587,15 @@ export function CalendarPopup({
 
     return (
       <div className="flex-1 h-[380px]">
-        <div className="text-center text-xl font-medium text-white mb-6">
-          {format(month, "MMMM") +
-            (month.getFullYear() !== new Date().getFullYear()
-              ? " " + month.getFullYear()
-              : "")}
+        <div className="text-center text-xl font-medium text-white mb-6" aria-hidden="true">
+          {format(month, "MMMM yyyy")}
         </div>
 
-        <div className="grid grid-cols-7 gap-1 mb-4">
+        <div className="grid grid-cols-7 gap-1 mb-4" role="row">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
             <div
               key={day}
+              role="columnheader"
               className="text-center text-sm text-gray-400 py-2 font-medium"
             >
               {day[0]}
@@ -605,7 +603,7 @@ export function CalendarPopup({
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-y-1">
+        <div className="grid grid-cols-7 gap-y-1" role="grid" aria-label={format(month, "MMMM yyyy")}>
           {emptyDays.map((_, index) => (
             <div key={`empty-${index}`} className="h-[44px]" />
           ))}
@@ -682,7 +680,7 @@ export function CalendarPopup({
               (isReturn && selectingMode === "departure");
 
             return (
-              <div key={day.toISOString()} className="relative h-[44px] w-full">
+              <div key={day.toISOString()} role="gridcell" className="relative h-[44px] w-full">
                 {showRangeBackground && (
                   <div
                     className={`bg-[#394457] absolute inset-0 pointer-events-none ${
@@ -706,6 +704,14 @@ export function CalendarPopup({
                   className={buttonClass}
                   onClick={() => !isPast && !isFuture && handleDateClick(day)}
                   disabled={isPast || isFuture}
+                  aria-label={
+                    format(day, "EEEE, MMMM d, yyyy") +
+                    (showPrice && price !== null ? `. $${price}` : "") +
+                    (isDeparture ? ", Departure date." : "") +
+                    (isReturn ? ", Return date." : "")
+                  }
+                  aria-selected={!!(isDeparture || isReturn)}
+                  aria-disabled={isPast || isFuture}
                 >
                   <div className="flex flex-col items-center w-full max-w-full px-1 relative z-10">
                     <span
@@ -770,6 +776,8 @@ export function CalendarPopup({
   return (
     <div
       ref={containerRef}
+      role="dialog"
+      aria-label="Select dates"
       className="absolute -top-5 -right-5 z-50 max-w-3xl w-[768px] bg-[#36373A] text-white p-0 rounded-md shadow-[0_0_20px_rgba(0,0,0,0.3)] mr-4"
       style={{
         transform: verticalOffsetPx ? `translateY(${verticalOffsetPx}px)` : undefined,
@@ -1024,6 +1032,7 @@ export function CalendarPopup({
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label="Previous month"
                 onClick={() => navigateMonth("prev")}
                 className="bg-[#3C3D40] text-[#8AB4F8] hover:text-white absolute rounded-full top-1/2 -translate-y-1/2 -left-10 shadow-lg [&_svg]:!size-8 z-20"
               >
@@ -1035,6 +1044,7 @@ export function CalendarPopup({
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label="Next month"
                 onClick={() => navigateMonth("next")}
                 className="bg-[#3C3D40] text-[#8AB4F8] hover:text-white absolute rounded-full top-1/2 -translate-y-1/2 -right-10 shadow-lg [&_svg]:!size-8 z-20"
               >
@@ -1087,6 +1097,7 @@ export function CalendarPopup({
           <div className="flex justify-end">
             <Button
               className="bg-[#8AB4F8] hover:bg-[#9EC1F9] text-[#394457] h-8 px-6 rounded-full"
+              aria-label="Done"
               onClick={() => onOpenChange(false)}
             >
               Done

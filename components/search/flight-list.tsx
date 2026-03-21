@@ -511,7 +511,7 @@ export function FlightList() {
           </div>
 
           {/* Flight sections container - no spacing between sections */}
-          <div>
+          <div aria-label="Flight results">
             {isTopFlightsSort ? (
               // Layout for "Top flights" sort option
               <>

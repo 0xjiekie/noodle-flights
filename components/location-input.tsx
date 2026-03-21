@@ -1031,6 +1031,9 @@ export function LocationInput({
           onClick={undefined}
           onPointerDown={handleNormalInputPointerDown}
           onKeyDown={handleKeyDown}
+          aria-label={placeholder}
+          aria-hidden={isPopoverOpen}
+          tabIndex={isPopoverOpen ? -1 : 0}
           className={(() => {
             const text = value || "";
             const overlayActive =
@@ -1113,6 +1116,7 @@ export function LocationInput({
                         onClick={() => removePill(location.id)}
                         variant="ghost"
                         size="sm"
+                        aria-label={`Remove ${displayText}`}
                         className="h-4 w-4 p-0 rounded-full flex-shrink-0"
                       >
                         <X className="h-3 w-3" />
@@ -1188,6 +1192,7 @@ export function LocationInput({
                         }}
                         variant="ghost"
                         size="sm"
+                        aria-label={`Remove ${cityGroup.name}`}
                         className="h-4 w-4 p-0 rounded-full flex-shrink-0"
                       >
                         <X className="h-3 w-3" />
@@ -1246,6 +1251,16 @@ export function LocationInput({
                     )
                   }
                   onKeyDown={handleKeyDown}
+                  role="combobox"
+                  aria-expanded={filteredSuggestions.length > 0}
+                  aria-controls="location-suggestions-listbox"
+                  aria-autocomplete="list"
+                  aria-label={placeholder}
+                  aria-activedescendant={
+                    hasNavigatedToSuggestion && selectedSuggestionIndex >= 0
+                      ? `location-suggestion-${selectedSuggestionIndex}`
+                      : undefined
+                  }
                   className="flex-1 w-full text-[#C2C6CA] placeholder:text-[#C2C6CA] bg-transparent border-0 outline-none ring-0 focus-visible:ring-0 p-0 h-full scrollbar-hide relative z-10 pr-0 whitespace-pre font-[inherit]"
                   style={{
                     fontSize: "16px",
@@ -1265,6 +1280,7 @@ export function LocationInput({
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0"
+                  aria-label="Select multiple airports"
                   tabIndex={-1}
                   onKeyDown={(e) => {
                     // Prevent the button from interfering with keyboard navigation
@@ -1303,6 +1319,7 @@ export function LocationInput({
                   variant="ghost"
                   size="sm"
                   className="h-10 w-10 p-0 rounded-full bg-[#8AB4F8]"
+                  aria-label="Confirm selection"
                   tabIndex={-1}
                   onKeyDown={(e) => {
                     // Prevent the button from interfering with keyboard navigation
@@ -1340,7 +1357,7 @@ export function LocationInput({
           </div>
 
           {/* Suggestions */}
-          <div className="">
+          <div className="" role="listbox" id="location-suggestions-listbox" aria-label={isDestination ? "Destination suggestions" : "Origin suggestions"}>
             {filteredSuggestions.length > 0 ? (
               filteredSuggestions.map((suggestion, index) => {
                 if ("airports" in suggestion) {
@@ -1359,6 +1376,9 @@ export function LocationInput({
                     >
                       <AccordionItem value={suggestion.id} className="border-0">
                         <AccordionTrigger
+                          role="option"
+                          id={`location-suggestion-${index}`}
+                          aria-selected={isHighlighted}
                           className={cn(
                             "flex items-center gap-3 w-full p-4 text-left [&[data-state=open]>svg]:rotate-180 no-underline",
                             isHighlighted
@@ -1461,6 +1481,9 @@ export function LocationInput({
                                 return (
                                   <Button
                                     key={airport.id}
+                                    role="option"
+                                    id={`location-suggestion-${index}-airport-${airportIndex}`}
+                                    aria-selected={isAirportHighlighted}
                                     variant="ghost"
                                     className={cn(
                                       "w-full justify-start p-4 h-auto bg-[#37383B] text-left rounded-none border-0 pl-12 hover:bg-[#5e5f62]",
@@ -1541,6 +1564,9 @@ export function LocationInput({
                   return (
                     <Button
                       key={suggestion.id}
+                      role="option"
+                      id={`location-suggestion-${index}`}
+                      aria-selected={isHighlighted}
                       variant="ghost"
                       className={cn(
                         "w-full justify-start p-4 h-auto text-left rounded-none border-0 ",

@@ -27,7 +27,7 @@ export function FlightSection({
     return (
         <div className={title ? "" : ""}>
             {title && <h3 className="text-lg font-medium text-white mb-4">{title}</h3>}
-            <div>
+            <div role="list" aria-label={title || "Flight results"}>
                 {flights.map((flight, index) => {
                     const isFirst = index === 0;
                     const isLast = index === flights.length - 1;
@@ -73,18 +73,19 @@ export function FlightSection({
                     }
                     
                     return (
-                        <FlightCard
-                            key={flight.id}
-                            flight={flight}
-                            isExpanded={isExpanded}
-                            onToggleExpanded={() => onToggleExpanded(flight.id)}
-                            onFlightAction={() => onFlightSelect(flight)}
-                            actionButtonText="Select flight"
-                            showPrice={true}
-                            priceHighlighted={priceHighlightMap.get(flight.id) || false}
-                            className={`${borderClass} ${roundingClass}`}
-                            uniqueKey={`${sectionType}-flight-${flight.id}`}
-                        />
+                        <div key={flight.id} role="listitem">
+                            <FlightCard
+                                flight={flight}
+                                isExpanded={isExpanded}
+                                onToggleExpanded={() => onToggleExpanded(flight.id)}
+                                onFlightAction={() => onFlightSelect(flight)}
+                                actionButtonText="Select flight"
+                                showPrice={true}
+                                priceHighlighted={priceHighlightMap.get(flight.id) || false}
+                                className={`${borderClass} ${roundingClass}`}
+                                uniqueKey={`${sectionType}-flight-${flight.id}`}
+                            />
+                        </div>
                     );
                 })}
             </div>

@@ -22,7 +22,7 @@ export default function FlightsBooking() {
           </h1>
 
           {/* Search Form */}
-          <div className={`relative w-full max-w-5xl bg-[#36373A] text-[#C2C6CA] backdrop-blur-sm rounded-lg p-2 px-4 pb-10 shadow-2xl shadow-black/50`}>
+          <div role="search" aria-label="Flight search" className={`relative w-full max-w-5xl bg-[#36373A] text-[#C2C6CA] backdrop-blur-sm rounded-lg p-2 px-4 pb-10 shadow-2xl shadow-black/50`}>
           <FlightsForm />
           </div>  
         </div>

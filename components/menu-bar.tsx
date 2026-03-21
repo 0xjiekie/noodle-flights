@@ -4,7 +4,7 @@ import { MenuBarBase } from "./menu-bar-base";
 
 export function MenuBar() {
   const leftContent = (
-    <Button variant="ghost" size="icon" className="hover:bg-gray-700/50 rounded-full">
+    <Button variant="ghost" size="icon" className="hover:bg-gray-700/50 rounded-full" aria-label="Main menu">
       <Menu className="!size-5 text-[#E8EAED]" />
     </Button>
   );

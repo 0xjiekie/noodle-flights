@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 
 export default function ResultsPage() {
   return (
+    <main aria-label="Search results">
     <div className="min-h-screen bg-[#202124] flex items-center justify-center">
       <div className="bg-[#36373A] text-[#C2C6CA] rounded-xl p-8 max-w-md w-full mx-4 text-center">
         <div className="flex flex-col items-center gap-6">
@@ -23,5 +24,6 @@ export default function ResultsPage() {
         </div>
       </div>
     </div>
+    </main>
   );
 } 

@@ -275,6 +275,9 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
           <PopoverTrigger asChild>
             <Button
               variant="google-navbar"
+              aria-label={`Trip type: ${tripTypeOptions.find(o => o.value === tripType)?.label}`}
+              aria-haspopup="listbox"
+              aria-expanded={tripTypePopover.isOpen}
               className={`font-normal ${
                 tripTypePopover.isOpen
                   ? "bg-[#4D5767] hover:bg-[#4D5767] border-b-2 border-b-[#8AACE5]"
@@ -299,11 +302,13 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
             align="start"
             className="w-40 bg-[#343438] border-0 text-[#C2C6CA] py-1 px-0 rounded-none"
           >
-            <div className="space-y-1">
+            <div className="space-y-1" role="listbox" aria-label="Trip type">
               {tripTypeOptions.map((option) => (
                 <Button
                   key={option.value}
                   variant="ghost"
+                  role="option"
+                  aria-selected={tripType === option.value}
                   className={`w-full rounded-none justify-start font-normal hover:bg-[#3C3D40] ${
                     tripType === option.value
                       ? "bg-[#394457] hover:bg-[#3C485F]"
@@ -357,6 +362,9 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
           <PopoverTrigger asChild>
             <Button
               variant="google-navbar"
+              aria-label={`Passengers: ${totalPassengersDisplay}`}
+              aria-haspopup="dialog"
+              aria-expanded={passengerPopover.isOpen}
               className={`font-normal ${
                 passengerPopover.isOpen
                   ? "bg-[#4D5767] hover:bg-[#4D5767] border-b-2 border-b-[#8AACE5]"
@@ -386,6 +394,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Remove adult"
                     onClick={() => updatePassengerCount("adults", false)}
                     disabled={passengerPopover.tempValue.adults <= 1}
                     className="h-8 w-8 p-0 bg-[#4B4C50] border-0"
@@ -398,6 +407,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Add adult"
                     onClick={() => updatePassengerCount("adults", true)}
                     disabled={
                       getTotalPassengers(passengerPopover.tempValue) >= 9
@@ -418,6 +428,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Remove child"
                     onClick={() => updatePassengerCount("children", false)}
                     disabled={passengerPopover.tempValue.children <= 0}
                     className="h-8 w-8 p-0 bg-[#4B4C50] border-0"
@@ -430,6 +441,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Add child"
                     onClick={() => updatePassengerCount("children", true)}
                     disabled={
                       getTotalPassengers(passengerPopover.tempValue) >= 9
@@ -450,6 +462,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Remove infant in seat"
                     onClick={() => updatePassengerCount("infants", false)}
                     disabled={passengerPopover.tempValue.infants <= 0}
                     className="h-8 w-8 p-0 bg-[#4B4C50] border-0"
@@ -462,6 +475,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Add infant in seat"
                     onClick={() => updatePassengerCount("infants", true)}
                     disabled={
                       getTotalPassengers(passengerPopover.tempValue) >= 9
@@ -482,6 +496,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Remove infant on lap"
                     onClick={() => updatePassengerCount("lapInfants", false)}
                     disabled={passengerPopover.tempValue.lapInfants <= 0}
                     className="h-8 w-8 p-0 bg-[#4B4C50] border-0"
@@ -494,6 +509,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                   <Button
                     variant="outline"
                     size="sm"
+                    aria-label="Add infant on lap"
                     onClick={() => updatePassengerCount("lapInfants", true)}
                     disabled={
                       getTotalPassengers(passengerPopover.tempValue) >= 9
@@ -509,6 +525,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                 <Button
                   variant="ghost"
                   size="sm"
+                  aria-label="Cancel passenger selection"
                   onClick={passengerPopover.cancel}
                   className="flex-1 text-[#8AB4F8] hover:bg-transparent hover:text-[#8AB4F8]"
                 >
@@ -517,6 +534,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                 <Button
                   size="sm"
                   variant="ghost"
+                  aria-label="Confirm passengers"
                   onClick={passengerPopover.confirm}
                   className="flex-1 text-[#8AB4F8] hover:bg-transparent hover:text-[#8AB4F8]"
                 >
@@ -535,6 +553,9 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
           <PopoverTrigger asChild>
             <Button
               variant="google-navbar"
+              aria-label={`Cabin class: ${travelClassOptions.find(o => o.value === travelClass)?.label}`}
+              aria-haspopup="listbox"
+              aria-expanded={travelClassPopover.isOpen}
               className={`w-30 font-normal ${
                 travelClassPopover.isOpen
                   ? "bg-[#4D5767] hover:bg-[#4D5767] border-b-2 border-b-[#8AACE5]"
@@ -559,11 +580,13 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
             align="start"
             className="w-52 bg-[#343438] border-0 text-[#C2C6CA] py-1 px-0 rounded-none"
           >
-            <div className="space-y-1">
+            <div className="space-y-1" role="listbox" aria-label="Cabin class">
               {travelClassOptions.map((option) => (
                 <Button
                   key={option.value}
                   variant="ghost"
+                  role="option"
+                  aria-selected={travelClass === option.value}
                   className={`rounded-none w-full justify-start font-normal hover:bg-[#3C3D40] ${
                     travelClass === option.value
                       ? "bg-[#394457] hover:bg-[#3C485F]"
@@ -621,6 +644,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                 <Button
                   variant="outline"
                   size="sm"
+                  aria-label="Swap origin and destination"
                   onClick={() => swapSegmentLocations(segment.id)}
                   className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 p-2 rounded-full border-y-0 hover:text-[#C2C6CA] cursor-default ${pathname === "/search" ? "bg-[#202124] hover:bg-[#202124]" : "bg-[#36373A] hover:bg-[#36373A]"}`}
                 >
@@ -718,6 +742,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
                 <Button
                   variant="ghost"
                   size="sm"
+                  aria-label={`Remove flight ${index + 1}`}
                   onClick={() => removeFlightSegment(segment.id)}
                   className="text-[#C2C6CA] hover:text-red-400 hover:bg-transparent p-2 my-auto"
                 >
@@ -731,6 +756,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
           <div className="flex justify-start">
             <Button
               variant="outline"
+              aria-label="Add another flight"
               onClick={addFlightSegment}
               className="bg-[#A6C5F8] text-[#36373A] hover:bg-[#7BA3E7] border-0 rounded-full px-6"
             >
@@ -786,6 +812,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
             <Button
               variant="outline"
               size="sm"
+              aria-label="Swap origin and destination"
               onClick={handleSwapLocations}
               className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 !w-[40px] !h-[38px] p-0 rounded-full border-0.5 transition-colors duration-200 cursor-default ${getSwapButtonBorderClasses()} ${pathname === "/search" ? "bg-[#202124] hover:bg-[#202124]" : "bg-[#36373A] hover:bg-[#36373A]"}`}
             >
@@ -944,6 +971,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
 
       {!hideSearchButton && (
         <Button
+          aria-label={shouldShowSearch() ? "Search flights" : "Explore flights"}
           onClick={handleSearchClick}
           className="absolute hover:bg-[#A6C5F8] text-black bg-[#7BA3E7] border-0 rounded-full px-6 flex items-center gap-2 -bottom-5 right-1/2 transform translate-x-1/2"
         >

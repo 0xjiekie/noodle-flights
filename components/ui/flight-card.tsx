@@ -128,8 +128,8 @@ export function FlightCard({
     }, [isExpanded, flight]);
 
     return (
-        <Accordion 
-            type="single" 
+        <Accordion
+            type="single"
             collapsible
             value={isExpanded ? uniqueKey : ""}
             onValueChange={(value) => {
@@ -138,6 +138,7 @@ export function FlightCard({
                     onToggleExpanded()
                 }
             }}
+            aria-label={`${flight.airline}, ${flight.departure} to ${flight.arrival}, ${flight.duration}, ${flight.stops}, ${flight.price}`}
             className={`bg-transparent overflow-hidden ${className}`}
         >
             <AccordionItem 
@@ -241,11 +242,12 @@ export function FlightCard({
                                     {/* Select Flight Button (when expanded) */}
                                     {onFlightAction && (
                                         <div className="flex items-center">
-                                            <Button 
+                                            <Button
                                                 variant="google-blue-outline"
                                                 size="rounded-full-sm"
                                                 className="font-normal"
                                                 onClick={onFlightAction}
+                                                aria-label={`Select this flight, ${flight.airline}, ${flight.price}`}
                                             >
                                                 {actionButtonText}
                                             </Button>
@@ -276,7 +278,7 @@ export function FlightCard({
                     </div>
 
                     {/* Separate chevron button - ONLY this triggers accordion */}
-                    <AccordionPrimitive.Trigger className="w-10 h-10 flex items-center justify-center hover:bg-gray-700/50 rounded-full transition-colors duration-200 mr-5 my-auto flex-shrink-0">
+                    <AccordionPrimitive.Trigger aria-label={isExpanded ? "Hide flight details" : "Show flight details"} className="w-10 h-10 flex items-center justify-center hover:bg-gray-700/50 rounded-full transition-colors duration-200 mr-5 my-auto flex-shrink-0">
                         <ChevronDown className={`h-5 w-5 shrink-0 transition-transform duration-200 text-white ${isExpanded ? 'rotate-180' : ''}`} />
                     </AccordionPrimitive.Trigger>
                 </AccordionPrimitive.Header>

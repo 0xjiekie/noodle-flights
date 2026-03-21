@@ -593,6 +593,13 @@ export function DateButton({
   return (
     <div
       data-date-button
+      role="button"
+      aria-label={
+        date
+          ? `${tripType === "return" ? "Return" : "Departure"} date, ${format(date, "EEEE MMMM d, yyyy")}`
+          : `${tripType === "return" ? "Return" : "Departure"} date`
+      }
+      tabIndex={0}
       className={`flex flex-1 items-center ${
         isStandalone
           ? "rounded-sm border border-[#5f6368]"
@@ -620,6 +627,7 @@ export function DateButton({
               onBlur={handleInputBlur}
               onKeyDown={handleKeyDown}
               onClick={handleInputClick}
+              aria-label={tripType === "return" ? "Return date" : "Departure date"}
               className="bg-transparent text-[#E8EAED] font-normal w-[100px] outline-none border-none focus:ring-0 whitespace-nowrap"
               placeholder={label}
             />
@@ -636,6 +644,10 @@ export function DateButton({
         <div className="flex items-center self-stretch">
           {showLeftChevron && date && (
             <div
+              role="button"
+              aria-label="Previous day"
+              tabIndex={0}
+              aria-disabled={!canNavigateBack}
               onClick={(e) => {
                 e.stopPropagation();
                 if (canNavigateBack) {
@@ -658,6 +670,10 @@ export function DateButton({
           )}
           {showRightChevron && date && (
             <div
+              role="button"
+              aria-label="Next day"
+              tabIndex={0}
+              aria-disabled={!canNavigateForward}
               onClick={(e) => {
                 e.stopPropagation();
                 if (canNavigateForward) {

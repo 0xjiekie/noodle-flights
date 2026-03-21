@@ -82,11 +82,13 @@ export default function BookingPage() {
 
     if (hasNoFlightData || hasNoLocations) {
         return (
+            <main aria-label="Flight booking">
             <div className="min-h-screen bg-[#202124] text-white flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
                 </div>
             </div>
+            </main>
         )
     }
 
@@ -99,6 +101,7 @@ export default function BookingPage() {
 
 
     return (
+        <main aria-label="Flight booking">
         <div className="min-h-screen bg-[#202124] text-white">
             <div className="max-w-5xl mx-auto p-6">
                 {/* Header section with route and price */}
@@ -375,6 +378,7 @@ export default function BookingPage() {
                 </div>
             </div>
         </div>
+        </main>
     )
 }
 
