@@ -1032,7 +1032,7 @@ export function LocationInput({
           onPointerDown={handleNormalInputPointerDown}
           onKeyDown={handleKeyDown}
           aria-label={placeholder}
-          aria-hidden={isPopoverOpen}
+          aria-hidden={true}
           tabIndex={isPopoverOpen ? -1 : 0}
           className={(() => {
             const text = value || "";

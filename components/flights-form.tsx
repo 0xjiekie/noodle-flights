@@ -362,7 +362,7 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
           <PopoverTrigger asChild>
             <Button
               variant="google-navbar"
-              aria-label={`Passengers: ${totalPassengersDisplay}`}
+              aria-label={`${totalPassengersDisplay} ${totalPassengersDisplay === 1 ? "passenger" : "passengers"}, change number of passengers.`}
               aria-haspopup="dialog"
               aria-expanded={passengerPopover.isOpen}
               className={`font-normal ${
@@ -971,12 +971,12 @@ const FlightsForm = ({ hideSearchButton = false }: FlightsFormProps) => {
 
       {!hideSearchButton && (
         <Button
-          aria-label={shouldShowSearch() ? "Search flights" : "Explore flights"}
+          aria-label={shouldShowSearch() ? "Search flights" : "Search for flights"}
           onClick={handleSearchClick}
           className="absolute hover:bg-[#A6C5F8] text-black bg-[#7BA3E7] border-0 rounded-full px-6 flex items-center gap-2 -bottom-5 right-1/2 transform translate-x-1/2"
         >
           <Search className="h-4 w-4" />
-          <span>{shouldShowSearch() ? "Search" : "Explore"}</span>
+          <span>Search</span>
         </Button>
       )}
     </>

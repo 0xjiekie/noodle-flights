@@ -594,11 +594,7 @@ export function DateButton({
     <div
       data-date-button
       role="button"
-      aria-label={
-        date
-          ? `${tripType === "return" ? "Return" : "Departure"} date, ${format(date, "EEEE MMMM d, yyyy")}`
-          : `${tripType === "return" ? "Return" : "Departure"} date`
-      }
+      aria-label={tripType === "return" ? "Return" : "Departure"}
       tabIndex={0}
       className={`flex flex-1 items-center ${
         isStandalone
