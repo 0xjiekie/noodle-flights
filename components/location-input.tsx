@@ -1031,7 +1031,6 @@ export function LocationInput({
           onClick={undefined}
           onPointerDown={handleNormalInputPointerDown}
           onKeyDown={handleKeyDown}
-          aria-label={placeholder}
           aria-hidden={true}
           tabIndex={isPopoverOpen ? -1 : 0}
           className={(() => {
